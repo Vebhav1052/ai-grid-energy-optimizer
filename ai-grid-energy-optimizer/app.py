@@ -775,9 +775,12 @@ def main():
                         "grid": recommendation["grid_energy_used"]
                     }
                     
+                    # Get API URL from environment variable, default to localhost for development
+                    API_BASE_URL = os.environ.get("API_BASE_URL", "http://localhost:5000")
+                    
                     try:
                         response = requests.post(
-                            "http://localhost:5000/execute-plan",
+                            f"{API_BASE_URL}/execute-plan",
                             json=execution_data,
                             timeout=5
                         )
@@ -822,7 +825,7 @@ def main():
                             
                     except requests.exceptions.RequestException as e:
                         st.error(f"❌ Connection error: Could not connect to plant controller API. {str(e)}")
-                        st.info("💡 **Note:** Make sure the API server is running on http://localhost:5000")
+                        st.info(f"💡 **Note:** Make sure the API server is running on {API_BASE_URL}")
         
         else:
             st.info("👈 Set parameters and click 'Generate Prediction' to see results.")
